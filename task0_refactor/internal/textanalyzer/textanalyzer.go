@@ -21,7 +21,11 @@ func WordCount(text string) (int, error) {
 	if trimmed == "" {
 		return 0, fmt.Errorf("textanalyzer: word count: %w", ErrEmptyText)
 	}
-	panic("not implemented")
+	// strings.Fields splits the string around one or more
+	// consecutive white space characters (Unicode-aware),
+	// which is the desired behaviour for counting words.
+	words := strings.Fields(trimmed)
+	return len(words), nil
 }
 
 // CharCount повертає кількість символів (рун) у text, без урахування
@@ -29,5 +33,10 @@ func WordCount(text string) (int, error) {
 //
 // TODO(Завдання 0): реалізуйте.
 func CharCount(text string) int {
-	panic("not implemented")
+	trimmed := strings.TrimSpace(text)
+	if trimmed == "" {
+		return 0
+	}
+	// Count runes (Unicode code points) in the trimmed text.
+	return len([]rune(trimmed))
 }
