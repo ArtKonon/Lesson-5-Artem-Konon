@@ -1,42 +1,19 @@
-// Package textanalyzer реалізує прості функції аналізу тексту для
-// Завдання 0 (об'єднання text analyzer із Заняття 2 в multi-package проєкт).
 package textanalyzer
 
 import (
-	"errors"
-	"fmt"
-	"strings"
+	"github.com/softserve/go-with-genai-topic4-error-handling/task0_refactor/internal/repository"
+	"github.com/softserve/go-with-genai-topic4-error-handling/task0_refactor/internal/service"
 )
 
-// ErrEmptyText — sentinel error для порожнього вхідного тексту.
-var ErrEmptyText = errors.New("textanalyzer: empty text")
+// ErrEmptyText is kept for backward compatibility with existing tests and callers.
+var ErrEmptyText = repository.ErrEmptyText
 
-// WordCount повертає кількість слів у text (розділених пробільними
-// символами). Якщо text порожній (або складається лише з пробілів),
-// повертає помилку, що через %w обгортає ErrEmptyText.
-//
-// TODO(Завдання 0): реалізуйте.
+// WordCount returns the number of words in the provided text.
 func WordCount(text string) (int, error) {
-	trimmed := strings.TrimSpace(text)
-	if trimmed == "" {
-		return 0, fmt.Errorf("textanalyzer: word count: %w", ErrEmptyText)
-	}
-	// strings.Fields splits the string around one or more
-	// consecutive white space characters (Unicode-aware),
-	// which is the desired behaviour for counting words.
-	words := strings.Fields(trimmed)
-	return len(words), nil
+	return service.NewTextService(repository.NewTextRepository()).WordCount(text)
 }
 
-// CharCount повертає кількість символів (рун) у text, без урахування
-// пробільних символів на початку/в кінці.
-//
-// TODO(Завдання 0): реалізуйте.
+// CharCount returns the number of runes in the provided text.
 func CharCount(text string) int {
-	trimmed := strings.TrimSpace(text)
-	if trimmed == "" {
-		return 0
-	}
-	// Count runes (Unicode code points) in the trimmed text.
-	return len([]rune(trimmed))
+	return service.NewTextService(repository.NewTextRepository()).CharCount(text)
 }
